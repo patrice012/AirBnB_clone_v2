@@ -12,6 +12,25 @@ from models.amenity import Amenity
 from models.review import Review
 
 
+def parse(arg):
+    """Parses arguments from line"""
+    curly_braces = re.search(r"\{(.*?)\}", arg)
+    brackets = re.search(r"\[(.*?)\]", arg)
+    if curly_braces is None:
+        if brackets is None:
+            return [i.strip(",") for i in split(arg)]
+        else:
+            lexer = split(arg[:brackets.span()[0]])
+            retl = [i.strip(",") for i in lexer]
+            retl.append(brackets.group())
+            return retl
+    else:
+        lexer = split(arg[:curly_braces.span()[0]])
+        retl = [i.strip(",") for i in lexer]
+        retl.append(curly_braces.group())
+        return retl
+
+
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
@@ -44,47 +63,49 @@ class HBNBCommand(cmd.Cmd):
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
         # scan for general formating - i.e '.', '(', ')'
-        if not ('.' in line and '(' in line and ')' in line):
-            return line
+        # if not ('.' in line and '(' in line and ')' in line):
+        #     return line
 
-        try:  # parse line left to right
-            pline = line[:]  # parsed line
+        # try:  # parse line left to right
+        #     pline = line[:]  # parsed line
 
-            # isolate <class name>
-            _cls = pline[:pline.find('.')]
+        #     # isolate <class name>
+        #     _cls = pline[:pline.find('.')]
 
-            # isolate and validate <command>
-            _cmd = pline[pline.find('.') + 1:pline.find('(')]
-            if _cmd not in HBNBCommand.dot_cmds:
-                raise Exception
+        #     # isolate and validate <command>
+        #     _cmd = pline[pline.find('.') + 1:pline.find('(')]
+        #     if _cmd not in HBNBCommand.dot_cmds:
+        #         raise Exception
 
-            # if parantheses contain arguments, parse them
-            pline = pline[pline.find('(') + 1:pline.find(')')]
-            if pline:
-                # partition args: (<id>, [<delim>], [<*args>])
-                pline = pline.partition(', ')  # pline convert to tuple
+        #     # if parantheses contain arguments, parse them
+        #     pline = pline[pline.find('(') + 1:pline.find(')')]
+        #     if pline:
+        #         # partition args: (<id>, [<delim>], [<*args>])
+        #         pline = pline.partition(', ')  # pline convert to tuple
 
-                # isolate _id, stripping quotes
-                _id = pline[0].replace('\"', '')
-                # possible bug here:
-                # empty quotes register as empty _id when replaced
+        #         # isolate _id, stripping quotes
+        #         _id = pline[0].replace('\"', '')
+        #         # possible bug here:
+        #         # empty quotes register as empty _id when replaced
 
-                # if arguments exist beyond _id
-                pline = pline[2].strip()  # pline is now str
-                if pline:
-                    # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
-                            and type(eval(pline)) is dict:
-                        _args = pline
-                    else:
-                        _args = pline.replace(',', '')
-                        # _args = _args.replace('\"', '')
-            line = ' '.join([_cmd, _cls, _id, _args])
+        #         # if arguments exist beyond _id
+        #         pline = pline[2].strip()  # pline is now str
+        #         if pline:
+        #             # check for *args or **kwargs ==> is ==
+        #             if pline[0]  == '{' and pline[-1] =='}'\
+        #                     and type(eval(pline)) is dict:
+        #                 _args = pline
+        #             else:
+        #                 _args = pline.replace(',', '')
+        #                 # _args = _args.replace('\"', '')
+        #     line = ' '.join([_cmd, _cls, _id, _args])
 
-        except Exception as mess:
-            pass
-        finally:
-            return line
+        # except Exception as mess:
+        #     pass
+        # finally:
+        #     return line
+
+        return parse(line)
 
     def postcmd(self, stop, line):
         """Prints if isatty is false"""
@@ -94,7 +115,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
-        exit()
+        # exit()
+        return True
 
     def help_quit(self):
         """ Prints the help documentation for quit  """
@@ -103,7 +125,8 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
         print()
-        exit()
+        # exit()
+        return True
 
     def help_EOF(self):
         """ Prints the help documentation for EOF """
@@ -272,18 +295,18 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg is ==> ==
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
 
             args = args.partition(' ')
 
-            # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            # if att_name was not quoted arg => is not ==> !=
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
-            # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            # check for quoted val arg => is ==> ==
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
