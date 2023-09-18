@@ -19,6 +19,14 @@ For hbnb_test --> Use `hbnb_test_pwd` as password
 `
 ```
 cat setup_mysql_test.sql | sudo mysql -hlocalhost -uroot -p
-"SHOW DATABASES;" | mysql -uhbnb_test -p | grep hbnb_test_db
+echo "SHOW DATABASES;" | mysql -uhbnb_test -p | grep hbnb_test_db
 echo "SHOW GRANTS FOR 'hbnb_test'@'localhost';" | sudo mysql -uroot -p
 ```
+
+## Helpers
+`
+SHOW DATABASES;
+SHOW TABLES;
+USE  database_name;
+DROP DATABASEs IF EXISTS `hbnb_dev_db`;
+`
