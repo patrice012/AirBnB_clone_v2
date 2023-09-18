@@ -41,6 +41,20 @@ class test_fileStorage(unittest.TestCase):
         temp = storage.all()
         self.assertIsInstance(temp, dict)
 
+    def test_all_with_classname(self):
+        """__objects is properly returned using Class Name"""
+        from models.user import User
+        from models.city import City
+        from models.state import State
+        user = User()
+        city = City()
+        state = State()
+        objects = [user, city, state]
+        for obj in objects:
+            with self.subTest(obj=obj):
+                instance= storage.all(type(obj))["{}.{}".format(type(obj).__name__, obj.id)]
+                self.assertTrue(instance.__class__.__name__ is obj.__class__.__name__)
+
     def test_base_model_instantiation(self):
         """ File is not created on BaseModel save """
         new = BaseModel()
@@ -107,3 +121,12 @@ class test_fileStorage(unittest.TestCase):
         from models.engine.file_storage import FileStorage
         # print(type(storage))
         self.assertEqual(type(storage), FileStorage)
+
+    def test_delete(self):
+        """Object is delete"""
+        from models.user import User
+        before = len(storage.all())
+        user = User()
+        storage.delete(user)
+        after = len(storage.all())
+        self.assertEqual(before, after)
