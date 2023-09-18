@@ -12,23 +12,23 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-def parse(arg):
-    """Parses arguments from line"""
-    curly_braces = re.search(r"\{(.*?)\}", arg)
-    brackets = re.search(r"\[(.*?)\]", arg)
-    if curly_braces is None:
-        if brackets is None:
-            return [i.strip(",") for i in split(arg)]
-        else:
-            lexer = split(arg[:brackets.span()[0]])
-            retl = [i.strip(",") for i in lexer]
-            retl.append(brackets.group())
-            return retl
-    else:
-        lexer = split(arg[:curly_braces.span()[0]])
-        retl = [i.strip(",") for i in lexer]
-        retl.append(curly_braces.group())
-        return retl
+# def parse(arg):
+#     """Parses arguments from line"""
+#     curly_braces = re.search(r"\{(.*?)\}", arg)
+#     brackets = re.search(r"\[(.*?)\]", arg)
+#     if curly_braces is None:
+#         if brackets is None:
+#             return [i.strip(",") for i in split(arg)]
+#         else:
+#             lexer = split(arg[:brackets.span()[0]])
+#             retl = [i.strip(",") for i in lexer]
+#             retl.append(brackets.group())
+#             return retl
+#     else:
+#         lexer = split(arg[:curly_braces.span()[0]])
+#         retl = [i.strip(",") for i in lexer]
+#         retl.append(curly_braces.group())
+#         return retl
 
 
 class HBNBCommand(cmd.Cmd):
@@ -63,47 +63,47 @@ class HBNBCommand(cmd.Cmd):
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
         # scan for general formating - i.e '.', '(', ')'
-        # if not ('.' in line and '(' in line and ')' in line):
-        #     return line
+        if not ('.' in line and '(' in line and ')' in line):
+            return line
 
-        # try:  # parse line left to right
-        #     pline = line[:]  # parsed line
+        try:  # parse line left to right
+            pline = line[:]  # parsed line
 
-        #     # isolate <class name>
-        #     _cls = pline[:pline.find('.')]
+            # isolate <class name>
+            _cls = pline[:pline.find('.')]
 
-        #     # isolate and validate <command>
-        #     _cmd = pline[pline.find('.') + 1:pline.find('(')]
-        #     if _cmd not in HBNBCommand.dot_cmds:
-        #         raise Exception
+            # isolate and validate <command>
+            _cmd = pline[pline.find('.') + 1:pline.find('(')]
+            if _cmd not in HBNBCommand.dot_cmds:
+                raise Exception
 
-        #     # if parantheses contain arguments, parse them
-        #     pline = pline[pline.find('(') + 1:pline.find(')')]
-        #     if pline:
-        #         # partition args: (<id>, [<delim>], [<*args>])
-        #         pline = pline.partition(', ')  # pline convert to tuple
+            # if parantheses contain arguments, parse them
+            pline = pline[pline.find('(') + 1:pline.find(')')]
+            if pline:
+                # partition args: (<id>, [<delim>], [<*args>])
+                pline = pline.partition(', ')  # pline convert to tuple
 
-        #         # isolate _id, stripping quotes
-        #         _id = pline[0].replace('\"', '')
-        #         # possible bug here:
-        #         # empty quotes register as empty _id when replaced
+                # isolate _id, stripping quotes
+                _id = pline[0].replace('\"', '')
+                # possible bug here:
+                # empty quotes register as empty _id when replaced
 
-        #         # if arguments exist beyond _id
-        #         pline = pline[2].strip()  # pline is now str
-        #         if pline:
-        #             # check for *args or **kwargs ==> is ==
-        #             if pline[0]  == '{' and pline[-1] =='}'\
-        #                     and type(eval(pline)) is dict:
-        #                 _args = pline
-        #             else:
-        #                 _args = pline.replace(',', '')
-        #                 # _args = _args.replace('\"', '')
-        #     line = ' '.join([_cmd, _cls, _id, _args])
+                # if arguments exist beyond _id
+                pline = pline[2].strip()  # pline is now str
+                if pline:
+                    # check for *args or **kwargs ==> is ==
+                    if pline[0]  == '{' and pline[-1] =='}'\
+                            and type(eval(pline)) is dict:
+                        _args = pline
+                    else:
+                        _args = pline.replace(',', '')
+                        # _args = _args.replace('\"', '')
+            line = ' '.join([_cmd, _cls, _id, _args])
 
-        # except Exception as mess:
-        #     pass
-        # finally:
-        #     return line
+        except Exception as mess:
+            pass
+        finally:
+            return line
 
         return parse(line)
 
@@ -138,16 +138,49 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
+
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        arg_list = args.split(" ")
+        try:
+            classname =  HBNBCommand.classes[arg_list[0]]
+            # Create new instance object
+            new_instance = classname()
+            for param in arg_list[1:]:
+                [key, value] = param.split("=")
+                # Check if it's enclosed inside double quote
+                if value[0] == '"' and value[-1] == '"':
+                    # Get the string value without quote
+                    value = value[1:-1]
+                    value = value.replace("_", " ").replace('"', '\\"').strip()
+                # Check if contains dot and not @ since email contains both
+                # and try to convert into float
+                elif "." in value and "@" not in value:
+                    try:
+                        value = float(value)
+                    except ValueError as e:
+                        pass
+                # Try to coonvert into int (Number)
+                elif value.isdigit():
+                    try:
+                        value = int(value)
+                    except ValueError as e:
+                        pass
+                # Check if object has attributes before setting it's value
+                # because objects are not instance of the same classes and they
+                # has differents attributes
+                # if hasattr(new_instance, key):
+                setattr(new_instance, key, value)
+            new_instance.save()
+            storage.save()
+            print(new_instance.id)
+            storage.save()
+        except (KeyError, NameError) as e:
             print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+            pass
+
+ 
 
     def help_create(self):
         """ Help information for the create method """
