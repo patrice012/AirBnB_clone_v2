@@ -47,7 +47,6 @@ class DBStorage:
 
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
-            
 
     def all(self, cls=None):
         """returns a dictionary
@@ -69,7 +68,7 @@ class DBStorage:
                 for elem in query:
                     key = "{}.{}".format(type(elem).__name__, elem.id)
                     dic[key] = elem
-        return (dic)
+        return dic
 
     def new(self, obj):
         """
