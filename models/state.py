@@ -15,15 +15,8 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
     cities = relationship("City", backref="state", cascade="delete")
 
-    # if storage_type == "db":
-    #     cities = relationship(
-    #         "City", backref="state", cascade="all, delete, delete-orphan"
-    #     )
+    if storage_type != "db":
 
-    # else:
-        # in order to match the test test_name3 for test_state classs
-        # name = ""
-    if storage_type != 'db':
         @property
         def cities(self):
             """
