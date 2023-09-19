@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, DATETIME
+from sqlalchemy import Column, String, DateTime
 
 Base = declarative_base()
 
@@ -18,10 +18,9 @@ class BaseModel:
         created_at (sqlalchemy DateTime): The datetime at creation.
         updated_at (sqlalchemy DateTime): The datetime of last update.
     """
-
-    id = Column(String(60), nullable=False, primary_key=True, unique=True)
-    created_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
-    updated_at = Column(DATETIME, nullable=False, default=datetime.utcnow())
+    id = Column(String(60), primary_key=True, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
@@ -36,12 +35,15 @@ class BaseModel:
             except KeyError as e:
                 pass
             # format date
-            kwargs["updated_at"] = datetime.strptime(
-                kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f"
-            )
-            kwargs["created_at"] = datetime.strptime(
-                kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f"
-            )
+            # try:
+            # kwargs["updated_at"] = datetime.strptime(
+            #     kwargs["updated_at"], "%Y-%m-%dT%H:%M:%S.%f"
+            # )
+            # kwargs["created_at"] = datetime.strptime(
+            #     kwargs["created_at"], "%Y-%m-%dT%H:%M:%S.%f"
+            #     )
+            # except KeyError as e:
+            #     pass
             # set instance's attributes
             for key, value in kwargs.items():
                 setattr(self, key, value)

@@ -88,3 +88,10 @@ echo 'all Review' | HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MY
 
 View all Reviews
 `echo 'SELECT * FROM reviews\G' | mysql -uhbnb_dev -p hbnb_dev_db`
+
+## 10. DBStorage - Amenity... and BOOM!
+
+Create Many-to-Many Relation
+```
+HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db ./main_place_amenities.py
+```
