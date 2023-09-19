@@ -47,18 +47,29 @@ class DBStorage:
 
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
+            
 
     def all(self, cls=None):
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
         """
-        Query on the current database session (self.__session) all objects\
-        depending of the class name (argument cls)
-        """
-        if cls and type(cls) is str:
-            _cls = eval(cls)
-            querySet = list(self.__session.query(_cls).all())
-            # format output like {<class-name>.<object-id>:object}
-            qs = {f"{type(obj).__name__}.{obj.id}": obj for obj in querySet}
-            return qs
+        dic = {}
+        if cls:
+            if type(cls) is str:
+                cls = eval(cls)
+            query = self.__session.query(cls)
+            for elem in query:
+                key = "{}.{}".format(type(elem).__name__, elem.id)
+                dic[key] = elem
+        else:
+            lista = [State, City, User, Place, Review, Amenity]
+            for clase in lista:
+                query = self.__session.query(clase)
+                for elem in query:
+                    key = "{}.{}".format(type(elem).__name__, elem.id)
+                    dic[key] = elem
+        return (dic)
 
     def new(self, obj):
         """

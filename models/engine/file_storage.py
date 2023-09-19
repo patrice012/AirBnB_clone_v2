@@ -13,23 +13,22 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
         """
-        Returns a dictionary of models currently in storage\
-        If cls(className) is not None this method will return\
-        all instances (objects) for this class
-        """
-        # print(cls, 'cls')
-        objects = {}
+        import shlex
+        dic = {}
         if cls:
-            for key, value in FileStorage.__objects.items():
-                # Get the value (object representation) and try
-                # to get the class Name => cls.__name__
-                if type(value).__name__ == cls.__name__:
-                    objects[key] = value
-            return objects
-        # Otherwise, returns the _objects dictionary
+            dictionary = self.__objects
+            for key in dictionary:
+                partition = key.replace('.', ' ')
+                partition = shlex.split(partition)
+                if (partition[0] == cls.__name__):
+                    dic[key] = self.__objects[key]
+            return (dic)
         else:
-            return FileStorage.__objects
+            return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
