@@ -20,6 +20,8 @@ class State(BaseModel, Base):
         )
 
     else:
+        # in order to match the test test_name3 for test_state classs
+        name = ""
 
         @property
         def cities(self):

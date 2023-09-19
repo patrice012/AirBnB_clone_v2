@@ -18,11 +18,12 @@ class FileStorage:
         If cls(className) is not None this method will return\
         all instances (objects) for this class
         """
+        # print(cls, 'cls')
         objects = {}
         if cls:
             for key, value in FileStorage.__objects.items():
                 # Get the value (object representation) and try
-                # to get the class Name
+                # to get the class Name => cls.__name__
                 if type(value).__name__ == cls.__name__:
                     objects[key] = value
             return objects
