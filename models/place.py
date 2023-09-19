@@ -6,7 +6,7 @@ from sqlalchemy import Column, String, ForeignKey, Integer, Float
 from models.base_model import BaseModel, Base
 
 
-class Place(BaseModel):
+class Place(BaseModel, Base):
     """A place to stay"""
 
     __tablename__ = "places"
