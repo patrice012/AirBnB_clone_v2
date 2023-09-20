@@ -9,6 +9,7 @@ from models.amenity import Amenity
 
 # creation of a State
 state = State(name="California")
+print(state.__dict__, "state.id")
 state.save()
 
 # creation of a City

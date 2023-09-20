@@ -36,7 +36,8 @@ DELETE FROM `TABLE_NAME` WHERE `condition`;
 ## 6. DBStorage - States and Cities 
 create state
 ```
-echo 'create State name="California"' | HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db ./console.py
+echo 'create State name="California"' | HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd
+HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db ./console.py
 ```
 get State id and save it eg: `state_id = c6ff0f0b-2646-46b8-8a84-50051f8e3844`
 
