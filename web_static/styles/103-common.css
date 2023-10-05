@@ -32,7 +32,7 @@ body {
     }
 }
 
-@media screen and (prefers-color-scheme: dark) {
+/* @media screen and (prefers-color-scheme: dark) {
     body {
         background-color: #1B1B1B;
         color: white;
@@ -45,4 +45,4 @@ body {
     footer {
         color: #1B1B1B;
     }
-}
+} */
