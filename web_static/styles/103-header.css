@@ -1,18 +1,26 @@
 header {
-	background-color: white;
-	height: 70px;
-	width: 100%;
-	
-	border-bottom: 1px solid #CCCCCC;
+    background-color: white;
+    border-bottom: 1px solid #cccccc;
 }
 
-#header_logo {
-	height: 100%;
-	width: 142px;
+header > nav {
+    background-image: url(../images/logo.png);
+    background-position: 20px center;
+    background-repeat: no-repeat;
+    color: #333;
+    height: 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    /* padding: 0 20px; */
+}
 
-	background-image: url("../images/logo.png");
-	background-repeat: no-repeat;
-	background-position: center;
+header h1,
+header a {
+    color: #333;
+}
 
-	margin-left: 20px;
+header a:hover {
+    color: #007bff;
+    text-decoration: underline;
 }

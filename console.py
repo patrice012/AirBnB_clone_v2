@@ -12,25 +12,6 @@ from models.amenity import Amenity
 from models.review import Review
 
 
-# def parse(arg):
-#     """Parses arguments from line"""
-#     curly_braces = re.search(r"\{(.*?)\}", arg)
-#     brackets = re.search(r"\[(.*?)\]", arg)
-#     if curly_braces is None:
-#         if brackets is None:
-#             return [i.strip(",") for i in split(arg)]
-#         else:
-#             lexer = split(arg[:brackets.span()[0]])
-#             retl = [i.strip(",") for i in lexer]
-#             retl.append(brackets.group())
-#             return retl
-#     else:
-#         lexer = split(arg[:curly_braces.span()[0]])
-#         retl = [i.strip(",") for i in lexer]
-#         retl.append(curly_braces.group())
-#         return retl
-
-
 class HBNBCommand(cmd.Cmd):
     """Contains the functionality for the HBNB console"""
 
@@ -165,7 +146,7 @@ class HBNBCommand(cmd.Cmd):
                     value = value[1:-1]
                     value = value.replace("_", " ").replace('"', '\\"').strip()
                 # Check if contains dot and not @ since email contains both
-                # and try to convert into float
+                # and try to convert it into float
                 elif "." in value and "@" not in value:
                     try:
                         value = float(value)
@@ -177,10 +158,6 @@ class HBNBCommand(cmd.Cmd):
                         value = int(value)
                     except ValueError as e:
                         pass
-                # Check if object has attributes before setting it's value
-                # because objects are not instance of the same classes and they
-                # has differents attributes
-                # if hasattr(new_instance, key):
                 setattr(new_instance, key, value)
             new_instance.save()
             storage.save()
