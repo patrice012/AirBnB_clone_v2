@@ -158,7 +158,7 @@ class TestConsole(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as f:
             self.console.onecmd("State.all()")
             self.assertEqual("[]\n", f.getvalue())
-    
+
     @unittest.skip('Using File DB')
     def test_z_count(self):
         """Test count command inpout"""
