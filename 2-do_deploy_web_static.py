@@ -4,8 +4,8 @@ Fabfile to distribute an archive to a web server.
 execute: fab -f 2-do_deploy_web_static.py do_deploy:\
     archive_path=folder/file.tgz -i ssh_key -u user
 """
-from os import path, getenv
-from dotenv import load_dotenv
+from os import path
+# from dotenv import load_dotenv
 from fabric.api import env
 from fabric.api import put
 from fabric.api import run
@@ -15,11 +15,11 @@ env.user = "ubuntu"
 env.key_filename = "~/.ssh/id_rsa"
 
 
-# load env variable
-if load_dotenv():
-    env.hosts = [getenv('SERVER_1'), getenv('SERVER_2')]
-    env.user = getenv('REMOTE_USER')
-    env.key_filename = getenv('SECRET_KEY')
+# # load env variable
+# if load_dotenv():
+#     env.hosts = [getenv('SERVER_1'), getenv('SERVER_2')]
+#     env.user = getenv('REMOTE_USER')
+#     env.key_filename = getenv('SECRET_KEY')
 
 
 def do_deploy(archive_path):

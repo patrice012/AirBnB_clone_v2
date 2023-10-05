@@ -5,20 +5,24 @@ Full deployment
 execute: fab -f 3-deploy_web_static.py deploy:\
     archive_path=folder/file.tgz -i ssh_key -u user
 """
-from os import path, getenv
-from dotenv import load_dotenv
+from os import path
+# from dotenv import load_dotenv
 from datetime import datetime
 from fabric.api import env
 from fabric.api import local
 from fabric.api import put
 from fabric.api import run
 
-# load env variable
-if load_dotenv():
-    env.hosts = [getenv('SERVER_1'), getenv('SERVER_2')]
-    env.user = getenv('REMOTE_USER')
-    env.key_filename = getenv('SECRET_KEY')
+# # load env variable
+# if load_dotenv():
+#     env.hosts = [getenv('SERVER_1'), getenv('SERVER_2')]
+#     env.user = getenv('REMOTE_USER')
+#     env.key_filename = getenv('SECRET_KEY')
 
+
+env.hosts = ["54.161.238.31", "3.85.1.142"]
+env.user = "ubuntu"
+env.key_filename = "~/.ssh/id_rsa"
 
 def do_pack():
     """making an archive on web_static folder"""
@@ -79,6 +83,12 @@ def do_deploy(archive_path):
 
 
 def deploy():
+    """Create and distribute an archive to a web server."""
+    file = do_pack()
+    if file is None:
+        return False
+    return do_deploy(file)
+
     """Create and distribute an archive to a web server."""
     file = do_pack()
     if file is None:
