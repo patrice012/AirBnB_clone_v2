@@ -1,11 +1,14 @@
 from datetime import datetime
-from fabric.api import local
+from fabric.api import local, env
 from os.path import isdir
 
 """
 Fabric script to genereate tgz archive
 execute: fab -f 1-pack_web_static.py do_pack
 """
+
+# Set the environment to use local host
+env.hosts = ['localhost']
 
 
 def do_pack():
