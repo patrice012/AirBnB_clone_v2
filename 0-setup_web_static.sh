@@ -34,12 +34,13 @@ html="<html>
     Holberton School
   </body>
 </html>"
-echo "$html" | sudo tee /data/web_static/releases/test/index.html
+echo "$html" > /data/web_static/releases/test/index.html
 
 
 # Create or recreate the symbolic link
 echo -e "Create a symbolic link.\n"
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+rm -rf /data/web_static/current
+ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Give ownership to the ubuntu user and group recursively
 sudo chown -R ubuntu:ubuntu /data/
@@ -68,7 +69,7 @@ echo "server {
       root /var/www/html;
       internal;
     }
-}" | sudo tee "$nginx_config"
+}" > "$nginx_config"
 
 
 echo -e "Start Nginx...\n"

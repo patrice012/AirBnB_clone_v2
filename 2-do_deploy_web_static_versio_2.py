@@ -1,45 +1,25 @@
 #!/usr/bin/python3
 """
 Fabfile to distribute an archive to a web server.
-Full deployment
-execute: fab -f 3-deploy_web_static.py deploy:\
+execute: fab -f 2-do_deploy_web_static.py do_deploy:\
     archive_path=folder/file.tgz -i ssh_key -u user
 """
 from os import path
 # from dotenv import load_dotenv
-from datetime import datetime
 from fabric.api import env
-from fabric.api import local
 from fabric.api import put
 from fabric.api import run
+
+env.hosts = ["54.161.238.31", "3.85.1.142"]
+env.user = "ubuntu"
+env.key_filename = "~/.ssh/id_rsa"
+
 
 # # load env variable
 # if load_dotenv():
 #     env.hosts = [getenv('SERVER_1'), getenv('SERVER_2')]
 #     env.user = getenv('REMOTE_USER')
 #     env.key_filename = getenv('SECRET_KEY')
-
-
-env.hosts = ["54.161.238.31", "3.85.1.142"]
-env.user = "ubuntu"
-env.key_filename = "~/.ssh"
-
-
-def do_pack():
-    """making an archive on web_static folder"""
-    dt = datetime.utcnow()
-    file = "versions/web_static_{}{}{}{}{}{}.tgz".format(dt.year,
-                                                         dt.month,
-                                                         dt.day,
-                                                         dt.hour,
-                                                         dt.minute,
-                                                         dt.second)
-    if path.isdir("versions") is False:
-        if local("mkdir -p versions").failed is True:
-            return None
-    if local("tar -cvzf {} web_static".format(file)).failed is True:
-        return None
-    return file
 
 
 def do_deploy(archive_path):
@@ -81,17 +61,3 @@ def do_deploy(archive_path):
            format(name)).failed is True:
         return False
     return True
-
-
-def deploy():
-    """Create and distribute an archive to a web server."""
-    file = do_pack()
-    if file is None:
-        return False
-    return do_deploy(file)
-
-    """Create and distribute an archive to a web server."""
-    file = do_pack()
-    if file is None:
-        return False
-    return do_deploy(file)
