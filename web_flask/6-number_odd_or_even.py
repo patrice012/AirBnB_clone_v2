@@ -8,7 +8,7 @@ Routes:
     /hbnb: display “HBNB”
 """
 
-from flask import Flask
+from flask import Flask, render_template
 import re
 
 app = Flask(__name__)
@@ -27,7 +27,7 @@ def hbnb():
 
 
 @app.route("/c/<text>", strict_slashes=False)
-def display_c(text):
+def c(text):
     """
     Print argument value
     """
@@ -47,6 +47,19 @@ def python(text):
 def number(n):
     """Print n only if it's a number"""
     return f"{n} is a number"
+
+
+@app.route("/number_template/<int:n>", strict_slashes=False)
+def number_template(n):
+    """render  to template"""
+    return render_template("5-number.html", n=n)
+
+
+@app.route("/number_odd_or_even/<int:n>", strict_slashes=False)
+def number_odd_or_even(n):
+    """render values  to template"""
+    parity = "even" if n % 2 == 0 else "odd"
+    return render_template("6-number_odd_or_even.html", n=n, parity=parity)
 
 
 if __name__ == "__main__":
