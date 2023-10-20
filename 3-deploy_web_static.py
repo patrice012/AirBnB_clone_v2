@@ -13,12 +13,6 @@ from fabric.api import local
 from fabric.api import put
 from fabric.api import run
 
-# # load env variable
-# if load_dotenv():
-#     env.hosts = [getenv('SERVER_1'), getenv('SERVER_2')]
-#     env.user = getenv('REMOTE_USER')
-#     env.key_filename = getenv('SECRET_KEY')
-
 
 env.hosts = ["54.161.238.31", "3.85.1.142"]
 env.user = "ubuntu"
