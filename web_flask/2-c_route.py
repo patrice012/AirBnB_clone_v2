@@ -6,6 +6,7 @@ Use the option strict_slashes=False in route definition
 Routes:
     /: display “Hello HBNB!”
     /hbnb: display “HBNB”
+    /c/<text>: display “C ” followed by the value of the text variable
 """
 
 from flask import Flask
