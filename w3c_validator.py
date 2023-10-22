@@ -32,15 +32,13 @@ import os
 
 
 def __print_stdout(msg):
-    """Print message in STDOUT
-    """
-    sys.stdout.buffer.write(msg.encode('utf-8'))
+    """Print message in STDOUT"""
+    sys.stdout.buffer.write(msg.encode("utf-8"))
 
 
 def __print_stderr(msg):
-    """Print message in STDERR
-    """
-    sys.stderr.buffer.write(msg.encode('utf-8'))
+    """Print message in STDERR"""
+    sys.stderr.buffer.write(msg.encode("utf-8"))
 
 
 def __is_empty(file):
@@ -52,7 +50,7 @@ def __validate(file_path, type):
     """
     Start validation of files
     """
-    h = {'Content-Type': "{}; charset=utf-8".format(type)}
+    h = {"Content-Type": "{}; charset=utf-8".format(type)}
     # Open files in binary mode:
     # https://requests.readthedocs.io/en/master/user/advanced/
     d = open(file_path, "rb").read()
@@ -63,20 +61,18 @@ def __validate(file_path, type):
         raise ConnectionError("Unable to connect to API endpoint.")
 
     res = []
-    messages = r.json().get('messages', [])
+    messages = r.json().get("messages", [])
     for m in messages:
         # Capture files that have incomplete or broken HTML
-        if m['type'] == 'error' or m['type'] == 'info':
-            res.append("'{}' => {}".format(file_path, m['message']))
+        if m["type"] == "error" or m["type"] == "info":
+            res.append("'{}' => {}".format(file_path, m["message"]))
         else:
-            res.append("[{}:{}] {}".format(
-                file_path, m['lastLine'], m['message']))
+            res.append("[{}:{}] {}".format(file_path, m["lastLine"], m["message"]))
     return res
 
 
 def __analyse(file_path):
-    """Start analyse of a file and print the result
-    """
+    """Start analyse of a file and print the result"""
     nb_errors = 0
     try:
         result = None
@@ -110,8 +106,7 @@ def __analyse(file_path):
 
 
 def __files_loop():
-    """Loop that analyses for each file from input arguments
-    """
+    """Loop that analyses for each file from input arguments"""
     nb_errors = 0
     for file_path in sys.argv[1:]:
         nb_errors += __analyse(file_path)
@@ -120,8 +115,7 @@ def __files_loop():
 
 
 if __name__ == "__main__":
-    """Main
-    """
+    """Main"""
     if len(sys.argv) < 2:
         __print_stderr("usage: w3c_validator.py file1 file2 ...\n")
         exit(1)
